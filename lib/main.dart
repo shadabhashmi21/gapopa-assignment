@@ -12,7 +12,6 @@ class MyApp extends StatelessWidget {
   Widget build(final BuildContext context) => MaterialApp(
       title: 'Gapopa Assignment',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
       home: const HomePage(),
