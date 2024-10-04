@@ -68,6 +68,7 @@ class HomeScreen extends HookWidget {
               crossAxisCount: crossAxisCount,
               mainAxisSpacing: 5,
               crossAxisSpacing: 5,
+              childAspectRatio: 1/0.8,
             ),
             itemCount: imageList.value.length,
             itemBuilder: (final BuildContext context, final int index) {

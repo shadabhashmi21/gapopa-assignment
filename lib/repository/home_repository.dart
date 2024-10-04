@@ -8,7 +8,9 @@ class HomeRepository {
 
   Future<Either<String?, PixabayResponse>> fetchHits(final int pageNumber) async {
     try {
-      final response = await networkService.get('api/?key=${app_constants.apiKey}&page=$pageNumber');
+      final response = await networkService.get(
+        'api/?key=${app_constants.apiKey}&page=$pageNumber&per_page=${app_constants.perPageQuery}',
+      );
       return Right(PixabayResponse.fromJson(response as Map<String, dynamic>));
     } catch (e) {
       return Left(e.toString());
