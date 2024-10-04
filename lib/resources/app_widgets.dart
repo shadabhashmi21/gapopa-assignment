@@ -30,7 +30,7 @@ class APILoadingWidget extends StatelessWidget {
 }
 
 class APIErrorWidget extends StatelessWidget {
-  const APIErrorWidget({required this.error, super.key, this.onRetryPressed, this.showRetry = true});
+  const APIErrorWidget({required this.error, super.key, this.onRetryPressed, this.showRetry = false});
 
   final String error;
   final VoidCallback? onRetryPressed;

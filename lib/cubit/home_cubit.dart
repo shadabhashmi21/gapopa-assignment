@@ -2,6 +2,7 @@ import 'package:gapopa_assignment/cubit/base_cubit.dart';
 import 'package:gapopa_assignment/cubit/states/home_states.dart';
 import 'package:gapopa_assignment/log_helper.dart';
 import 'package:gapopa_assignment/repository/home_repository.dart';
+import 'package:gapopa_assignment/resources/app_constants.dart' as app_constants;
 
 int currentPage = 1;
 int totalPage = 1;
@@ -44,7 +45,7 @@ class HomeCubit extends BaseCubit {
       if (response.isRight) {
         final homeResponse = response.right;
 
-        totalPage = (homeResponse.totalHits! / 20).ceil();
+        totalPage = (homeResponse.totalHits! / app_constants.perPageQuery).ceil();
 
         emit(HomeSuccessState(data: homeResponse));
       } else {
