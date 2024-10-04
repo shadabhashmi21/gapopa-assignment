@@ -13,7 +13,7 @@ class NetworkService {
         baseUrl: _baseUrl,
         connectTimeout: _apiTimeout,
         receiveTimeout: _apiTimeout,
-        headers: {'Content-Type': 'application/json'},
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
       ),
     );
 
