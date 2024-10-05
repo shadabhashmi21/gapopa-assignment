@@ -42,7 +42,7 @@ class HomeScreen extends HookWidget {
 
     useBlocListener<HomeCubit, DataState>(
       homeCubit,
-          (final cubit, final value, final context) {
+      (final cubit, final value, final context) {
         if (value is HomeSuccessState) {
           imageList.value.addAll([...?value.data?.hits]);
           refreshPage();
@@ -56,31 +56,41 @@ class HomeScreen extends HookWidget {
         title: Text('Gallery'),
         centerTitle: true,
       ),
-      body: cubitState is HomeLoadingState ? APILoadingWidget(loadingText: cubitState.loadingMessage) : cubitState is HomeSuccessState ? LayoutBuilder(
-        builder: (final context, final constraints) {
-          const itemWidth = 200;
-          final crossAxisCount = (constraints.maxWidth / itemWidth).floor();
+      body: cubitState is HomeLoadingState
+          ? APILoadingWidget(loadingText: cubitState.loadingMessage)
+          : cubitState is HomeSuccessState
+              ? LayoutBuilder(
+                  builder: (final context, final constraints) => HookBuilder(
+                    builder: (final context) {
+                      final crossAxisCount = useMemoized(() {
+                        const itemWidth = 200;
+                        return (constraints.maxWidth / itemWidth).floor();
+                      }, [constraints.maxWidth],);
 
-          return GridView.builder(
-            controller: scrollController,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: crossAxisCount,
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 5,
-              childAspectRatio: 1/0.92,
-            ),
-            itemCount: imageList.value.length,
-            itemBuilder: (final BuildContext context, final int index) {
-              final item = imageList.value[index];
-              return _ImageGrid(
-                image: item.webformatURL,
-                likesCount: item.likes,
-                viewsCount: item.views,
-              );
-            },
-          );
-        },
-      ) : cubitState is HomeErrorPromptState ? APIErrorWidget(error: cubitState.errorMessage) : APIEmptyWidget(),
+                      return GridView.builder(
+                        controller: scrollController,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: crossAxisCount,
+                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 5,
+                          childAspectRatio: 1 / 0.92,
+                        ),
+                        itemCount: imageList.value.length,
+                        itemBuilder: (final BuildContext context, final int index) {
+                          final item = imageList.value[index];
+                          return _ImageGrid(
+                            image: item.webformatURL,
+                            likesCount: item.likes,
+                            viewsCount: item.views,
+                          );
+                        },
+                      );
+                    },
+                  ),
+                )
+              : cubitState is HomeErrorPromptState
+                  ? APIErrorWidget(error: cubitState.errorMessage)
+                  : APIEmptyWidget(),
     );
   }
 }
