@@ -63,12 +63,11 @@ class HomeScreen extends HookWidget {
 
           return GridView.builder(
             controller: scrollController,
-            padding: EdgeInsets.symmetric(vertical: 10),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: crossAxisCount,
-              mainAxisSpacing: 5,
+              mainAxisSpacing: 10,
               crossAxisSpacing: 5,
-              childAspectRatio: 1/0.8,
+              childAspectRatio: 1/0.92,
             ),
             itemCount: imageList.value.length,
             itemBuilder: (final BuildContext context, final int index) {
@@ -96,27 +95,31 @@ class _ImageGrid extends StatelessWidget {
   @override
   Widget build(final BuildContext context) => Card(
         elevation: 3,
-        child: Column(
-          children: [
-            FadeInImage(
-              height: 120,
-              fit: BoxFit.fitWidth,
-              placeholder: AssetImage(app_images.placeholder),
-              image: NetworkImage(image ?? ''),
-              imageErrorBuilder: (final context, final error, final stackTrace) => Flexible(
-                child: Image.asset(app_images.placeholder),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              FadeInImage(
+                height: 120,
+                fit: BoxFit.fitWidth,
+                placeholder: AssetImage(app_images.placeholder),
+                image: NetworkImage(image ?? ''),
+                imageErrorBuilder: (final context, final error, final stackTrace) => Flexible(
+                  child: Image.asset(app_images.placeholder),
+                ),
               ),
-            ),
-            SizedBox(height: 10),
-            Text(
-              'Likes: ${likesCount ?? 0}',
-              style: TextStyle(fontSize: 15),
-            ),
-            Text(
-              'Views: ${viewsCount ?? 0}',
-              style: TextStyle(fontSize: 15),
-            ),
-          ],
+              SizedBox(height: 5),
+              Text(
+                'Likes: ${likesCount ?? 0}',
+                style: TextStyle(fontSize: 12),
+              ),
+              Text(
+                'Views: ${viewsCount ?? 0}',
+                style: TextStyle(fontSize: 12),
+              ),
+            ],
+          ),
         ),
       );
 }
