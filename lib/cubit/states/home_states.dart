@@ -5,6 +5,10 @@ class HomeLoadingState extends LoadingState {
   HomeLoadingState(super.loadingMessage);
 }
 
+class HomeErrorState extends ErrorState {
+  HomeErrorState(super.errorMessage);
+}
+
 class HomeErrorPromptState extends ErrorPromptState {
   HomeErrorPromptState(super.errorMessage);
 }

@@ -4,7 +4,9 @@ import 'package:gapopa_assignment/cubit/home_cubit.dart';
 import 'package:gapopa_assignment/cubit/states/data_state.dart';
 import 'package:gapopa_assignment/cubit/states/home_states.dart';
 import 'package:gapopa_assignment/model/pixabay_response.dart';
+import 'package:gapopa_assignment/resources/app_constants.dart' as app_constants;
 import 'package:gapopa_assignment/resources/app_images.dart' as app_images;
+import 'package:gapopa_assignment/resources/app_utils.dart';
 import 'package:gapopa_assignment/resources/app_widgets.dart';
 import 'package:hooked_bloc/hooked_bloc.dart';
 
@@ -41,9 +43,11 @@ class HomeScreen extends HookWidget {
       (final cubit, final value, final context) {
         if (value is HomeSuccessState) {
           imageList.value = List.from(imageList.value)..addAll(value.data?.hits ?? []);
+        } else if (value is HomeErrorPromptState) {
+          showSnackBar(context, value.errorMessage);
         }
       },
-      listenWhen: (final _) => _ is HomeSuccessState,
+      listenWhen: (final state) => state is HomeSuccessState || state is HomeErrorPromptState,
     );
 
     return Scaffold(
@@ -58,7 +62,7 @@ class HomeScreen extends HookWidget {
                   imageList: imageList.value,
                   scrollController: scrollController,
                 )
-              : cubitState is HomeErrorPromptState
+              : cubitState is HomeErrorState
                   ? APIErrorWidget(error: cubitState.errorMessage)
                   : APIEmptyWidget(),
     );
@@ -89,7 +93,7 @@ class _ImageGrid extends StatelessWidget {
                 crossAxisCount: crossAxisCount,
                 mainAxisSpacing: 10,
                 crossAxisSpacing: 5,
-                childAspectRatio: 1 / 0.93,
+                childAspectRatio: app_constants.gridAspectRatio,
               ),
               itemCount: imageList.length,
               itemBuilder: (final BuildContext context, final int index) {

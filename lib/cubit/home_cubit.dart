@@ -3,6 +3,8 @@ import 'package:gapopa_assignment/cubit/states/home_states.dart';
 import 'package:gapopa_assignment/log_helper.dart';
 import 'package:gapopa_assignment/repository/home_repository.dart';
 import 'package:gapopa_assignment/resources/app_constants.dart' as app_constants;
+import 'package:gapopa_assignment/resources/app_extensions.dart';
+import 'package:gapopa_assignment/resources/app_strings.dart' as app_strings;
 
 int currentPage = 1;
 int totalPage = 1;
@@ -16,9 +18,9 @@ class HomeCubit extends BaseCubit {
   bool _isHomeApiCalling = false;
 
   Future<void> onHomeScrollChange(
-      final double scrollPositionInPixels,
-      final double maxScrollExtent,
-      ) async {
+    final double scrollPositionInPixels,
+    final double maxScrollExtent,
+  ) async {
     try {
       if (_isHomeApiCalling) {
         return;
@@ -37,23 +39,31 @@ class HomeCubit extends BaseCubit {
 
   Future<void> fetchHomeData({final bool firstCall = false}) async {
     _isHomeApiCalling = true;
-    if(firstCall){
+    if (firstCall) {
       emit(HomeLoadingState('Fetching data...'));
     }
     try {
-      final response = await _repository.fetchHits(currentPage);
+      final response = await _repository.fetchHits(pageNumber: currentPage);
       if (response.isRight) {
         final homeResponse = response.right;
 
-        totalPage = (homeResponse.totalHits! / app_constants.perPageQuery).ceil();
+        homeResponse.totalHits?.let((final totalHits) => totalPage = (totalHits / app_constants.perPageQuery).ceil());
 
         emit(HomeSuccessState(data: homeResponse));
       } else {
-        emit(HomeErrorPromptState(response.left ?? ''));
+        if (currentPage == 1) {
+          emit(HomeErrorState(response.left ?? app_strings.genericError));
+        } else {
+          emit(HomeErrorPromptState(response.left ?? app_strings.genericError));
+        }
       }
     } catch (e, s) {
       logE(_tag, message: e.toString(), stacktrace: s);
-      emit(HomeErrorPromptState('Something went wrong'));
+      if (currentPage == 1) {
+        emit(HomeErrorState(app_strings.genericError));
+      } else {
+        emit(HomeErrorPromptState(app_strings.genericError));
+      }
     }
     _isHomeApiCalling = false;
   }

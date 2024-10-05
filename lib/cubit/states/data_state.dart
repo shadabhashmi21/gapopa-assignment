@@ -28,16 +28,6 @@ class SuccessState<T> extends DataState {
   List<Object?> get props => [identityHashCode(this)];
 }
 
-class SuccessListState<T> extends DataState with EquatableMixin {
-  SuccessListState({required this.data, this.message});
-
-  final String? message;
-  final List<T> data;
-
-  @override
-  List<Object?> get props => [identityHashCode(this)];
-}
-
 class ErrorState extends DataState {
   ErrorState(this.errorMessage);
 
