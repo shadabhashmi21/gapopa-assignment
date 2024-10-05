@@ -1,0 +1,1 @@
+const String genericError = 'Something went wrong';

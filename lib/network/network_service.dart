@@ -7,16 +7,15 @@ const Duration _apiTimeout = Duration(seconds: 30);
 const String _baseUrl = 'https://pixabay.com/';
 
 class NetworkService {
-  NetworkService() {
-    _dio = Dio(
-      BaseOptions(
-        baseUrl: _baseUrl,
-        connectTimeout: _apiTimeout,
-        receiveTimeout: _apiTimeout,
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-      ),
-    );
-
+  NetworkService()
+      : _dio = Dio(
+          BaseOptions(
+            baseUrl: _baseUrl,
+            connectTimeout: _apiTimeout,
+            receiveTimeout: _apiTimeout,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          ),
+        ) {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (final options, final handler) {
@@ -35,7 +34,7 @@ class NetworkService {
     );
   }
 
-  late Dio _dio;
+  final Dio _dio;
 
   Future<dynamic> get(final String endpoint) async {
     try {

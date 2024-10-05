@@ -1,15 +1,16 @@
 import 'package:either_dart/either.dart';
 import 'package:gapopa_assignment/model/pixabay_response.dart';
-import 'package:gapopa_assignment/network/network_service.dart';
+import 'package:gapopa_assignment/repository/base_repository.dart';
 import 'package:gapopa_assignment/resources/app_constants.dart' as app_constants;
 
-class HomeRepository {
-  final networkService = NetworkService();
-
-  Future<Either<String?, PixabayResponse>> fetchHits(final int pageNumber) async {
+class HomeRepository extends BaseRepository {
+  Future<Either<String?, PixabayResponse>> fetchHits({
+    required final int pageNumber,
+    final int pagePerQuery = app_constants.perPageQuery,
+  }) async {
     try {
       final response = await networkService.get(
-        'api/?key=${app_constants.apiKey}&page=$pageNumber&per_page=${app_constants.perPageQuery}',
+        'api/?key=${app_constants.apiKey}&page=$pageNumber&per_page=$pagePerQuery}',
       );
       return Right(PixabayResponse.fromJson(response as Map<String, dynamic>));
     } catch (e) {
