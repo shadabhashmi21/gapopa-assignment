@@ -3,7 +3,7 @@ import 'package:gapopa_assignment/log_helper.dart';
 import 'package:gapopa_assignment/network/network_exception.dart';
 import 'package:gapopa_assignment/resources/app_utils.dart';
 
-const Duration _apiTimeout = Duration(seconds: 120);
+const Duration _apiTimeout = Duration(seconds: 30);
 const String _baseUrl = 'https://pixabay.com/';
 
 class NetworkService {
