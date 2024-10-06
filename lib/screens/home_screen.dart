@@ -168,15 +168,23 @@ class _ImageTile extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 5),
-              // Displays the likes count.
-              Text(
-                'Likes: ${likesCount ?? 0}',
-                style: TextStyle(fontSize: 12),
-              ),
-              // Displays the views count.
-              Text(
-                'Views: ${viewsCount ?? 0}',
-                style: TextStyle(fontSize: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Displays the likes count.
+                  Icon(Icons.thumb_up, size: 15,),
+                  Text(
+                    '${likesCount ?? 0}',
+                    style: TextStyle(fontSize: 12),
+                  ),
+                  SizedBox(width: 10,),
+                  // Displays the views count.
+                  Icon(Icons.remove_red_eye, size: 15,),
+                  Text(
+                    '${viewsCount ?? 0}',
+                    style: TextStyle(fontSize: 12),
+                  ),
+                ],
               ),
             ],
           ),
