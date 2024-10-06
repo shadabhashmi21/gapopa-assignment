@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
+/// A widget that displays a loading indicator with an optional message,
+/// while an API call is in progress
+/// - [loadingText] (optional): A message to display above the loading spinner.
 class APILoadingWidget extends StatelessWidget {
   const APILoadingWidget({super.key, this.loadingText});
 
+  /// An optional loading message
   final String? loadingText;
 
   @override
@@ -29,11 +33,21 @@ class APILoadingWidget extends StatelessWidget {
   );
 }
 
+/// A widget that displays an error message with an optional retry button,
+/// when there is an error in API call
+/// - [error]: The error message to display.
+/// - [onRetryPressed] (optional): The callback function to execute when the retry button is pressed.
+/// - [showRetry]: A flag indicating whether to show the retry button. Defaults to false.
 class APIErrorWidget extends StatelessWidget {
   const APIErrorWidget({required this.error, super.key, this.onRetryPressed, this.showRetry = false});
 
+  /// The error message to display.
   final String error;
+
+  /// An optional callback function that is executed when the retry button is pressed.
   final VoidCallback? onRetryPressed;
+
+  /// Whether to show the retry button. Defaults to false.
   final bool showRetry;
 
   @override
@@ -70,6 +84,7 @@ class APIErrorWidget extends StatelessWidget {
   );
 }
 
+/// A widget that represents an empty state, where no content or data is available.
 class APIEmptyWidget extends StatelessWidget {
   const APIEmptyWidget({super.key});
 

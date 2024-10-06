@@ -2,6 +2,23 @@ import 'package:colorize/colorize.dart';
 import 'package:fimber/fimber.dart';
 import 'package:flutter/foundation.dart';
 
+/// A utility for logging messages in the application.
+/// Logging is enabled only in non-release modes.
+///
+/// The logging functions include:
+/// - `logI` for info logs.
+/// - `logD` for debug logs.
+/// - `logV` for verbose logs.
+/// - `logW` for warning logs.
+/// - `logE` for error logs.
+///
+/// Additionally, there are colorized logging functions that display
+/// messages in specific colors in the console:
+/// - `logBlueText` for blue text.
+/// - `logGreenText` for green text.
+/// - `logYellowText` for yellow text.
+/// - `logRedText` for red text.
+
 bool _isLogEnabled = !kReleaseMode;
 
 void logI(final String tag,
