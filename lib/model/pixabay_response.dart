@@ -1,19 +1,38 @@
+/// Represents the response from the Pixabay API.
+///
+/// The [PixabayResponse] class models the JSON response returned from the
+/// Pixabay API, which includes the total number of results, total hits,
+/// and a list of hits (images).
 class PixabayResponse {
-
+  /// Creates an instance of [PixabayResponse].
+  ///
+  /// - [total]: The total number of items available in the response.
+  /// - [totalHits]: The total number of hits returned in the JSON response.
+  /// - [hits]: A list of [Hits] objects containing image data from the JSON response.
   PixabayResponse({
     this.total,
     this.totalHits,
     this.hits,
   });
 
+  /// Creates a [PixabayResponse] instance from a JSON map.
+  ///
+  /// - [json]: A map representation of the JSON response from the API.
   PixabayResponse.fromJson(final Map<String, dynamic> json)
       : total = json['total'] as int?,
         totalHits = json['totalHits'] as int?,
         hits = (json['hits'] as List?)?.map((final dynamic e) => Hits.fromJson(e as Map<String,dynamic>)).toList();
+
+  /// The total number of items available in the JSON response.
   final int? total;
+
+  /// The total number of hits returned in the JSON response.
   final int? totalHits;
+
+  /// A list of hits (images) returned by the API in the JSON response.
   final List<Hits>? hits;
 
+  /// Converts the [PixabayResponse] instance to a JSON map.
   Map<String, dynamic> toJson() => {
     'total' : total,
     'totalHits' : totalHits,
@@ -21,7 +40,13 @@ class PixabayResponse {
   };
 }
 
+/// Represents a single hit (image) returned from the Pixabay API.
+///
+/// The [Hits] class encapsulates the properties of each image returned
+/// by the Pixabay API, including various image URLs and metadata
+/// as defined in the JSON response.
 class Hits {
+  /// Creates an instance of [Hits].
 
   Hits({
     this.id,
@@ -48,6 +73,9 @@ class Hits {
     this.userImageURL,
   });
 
+  /// Creates a [Hits] instance from a JSON map.
+  ///
+  /// - [json]: A map representation of the JSON response for a single hit.
   Hits.fromJson(final Map<String, dynamic> json)
       : id = json['id'] as int?,
         pageURL = json['pageURL'] as String?,
@@ -95,6 +123,7 @@ class Hits {
   final String? user;
   final String? userImageURL;
 
+  /// Converts the [Hits] instance to a JSON map.
   Map<String, dynamic> toJson() => {
     'id' : id,
     'pageURL' : pageURL,

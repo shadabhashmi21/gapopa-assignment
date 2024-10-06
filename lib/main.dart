@@ -13,13 +13,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) => MaterialApp(
-      title: 'Gapopa Assignment',
-      theme: ThemeData(
-        useMaterial3: true,
-      ),
-      home: BlocProvider<HomeCubit>(
-        create: (final _) => HomeCubit(HomeRepository()),
-        child: HomeScreen(),
-      ),
-    );
+        title: 'Gapopa Assignment',
+        theme: ThemeData(
+          useMaterial3: true, // Enables Material 3 design for the app.
+        ),
+        // Provides [HomeCubit] to the widget tree.
+        home: BlocProvider<HomeCubit>(
+          create: (final _) => HomeCubit(HomeRepository()),
+          child: HomeScreen(),
+        ),
+      );
 }

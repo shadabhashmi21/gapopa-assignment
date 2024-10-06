@@ -3,10 +3,16 @@ import 'package:gapopa_assignment/log_helper.dart';
 import 'package:gapopa_assignment/network/network_exception.dart';
 import 'package:gapopa_assignment/resources/app_utils.dart';
 
-const Duration _apiTimeout = Duration(seconds: 30);
-const String _baseUrl = 'https://pixabay.com/';
-
+/// A service class for handling network requests using the Dio package.
+///
+/// The [NetworkService] class is responsible for making API calls, managing
+/// network configurations, and logging requests and responses. It includes
+/// error handling for network issues and timeouts.
 class NetworkService {
+  /// Creates an instance of [NetworkService] with default configurations.
+  ///
+  /// The constructor initializes the Dio instance with base URL, timeout
+  /// settings, and default headers.
   NetworkService()
       : _dio = Dio(
           BaseOptions(
@@ -36,6 +42,24 @@ class NetworkService {
 
   final Dio _dio;
 
+  /// A constant defining the timeout duration for API requests.
+  static const Duration _apiTimeout = Duration(seconds: 30);
+
+  /// A constant defining the base URL for the API.
+  static const String _baseUrl = 'https://pixabay.com/';
+
+  /// Sends a GET request to the specified endpoint.
+  ///
+  /// This method checks for an active internet connection before making the request.
+  /// If no internet connection is available, a [NoInternetException] is thrown.
+  ///
+  /// - [endpoint]: The API endpoint to send the GET request to.
+  ///
+  /// Returns:
+  /// - The response data on success.
+  ///
+  /// Throws:
+  /// - [NoInternetException] if there is no internet connection.
   Future<dynamic> get(final String endpoint) async {
     try {
       final internetConnected = await isInternetConnected();
@@ -45,6 +69,7 @@ class NetworkService {
       final Response response = await _dio.get(endpoint);
       return response.data;
     } catch (e) {
+      // Rethrow the error for further handling
       rethrow;
     }
   }

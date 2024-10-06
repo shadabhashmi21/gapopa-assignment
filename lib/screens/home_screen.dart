@@ -10,16 +10,26 @@ import 'package:gapopa_assignment/resources/app_utils.dart';
 import 'package:gapopa_assignment/resources/app_widgets.dart';
 import 'package:hooked_bloc/hooked_bloc.dart';
 
+/// A screen that displays a gallery of images in a grid format.
+/// The [HomeScreen] is a HookWidget that manages state and data fetching using a [HomeCubit].
 class HomeScreen extends HookWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(final BuildContext context) {
+    // Hook for accessing the HomeCubit instance.
     final HomeCubit homeCubit = useBloc();
+
+    // Hook for observing the current state of the HomeCubit.
     final DataState cubitState = useBlocBuilder(homeCubit);
+
+    // Scroll controller to track the user's scrolling position.
     final ScrollController scrollController = useScrollController();
+
+    // State management for holding the list of images.
     final ValueNotifier<List<Hits>> imageList = useState([]);
 
+    // Function that listens to scroll changes and triggers API accordingly.
     void scrollListener() {
       homeCubit.onHomeScrollChange(
         scrollController.position.pixels,
@@ -27,6 +37,7 @@ class HomeScreen extends HookWidget {
       );
     }
 
+    // Hook to fetch data once and add a scroll listener.
     useEffect(
       () {
         homeCubit.fetchHomeData(firstCall: true);
@@ -38,15 +49,21 @@ class HomeScreen extends HookWidget {
       [],
     );
 
+    // Bloc listener to listen different states from the HomeCubit.
     useBlocListener<HomeCubit, DataState>(
       homeCubit,
       (final cubit, final value, final context) {
         if (value is HomeSuccessState) {
+          // Adds new data to the existing list when the fetch is successful.
           imageList.value = List.from(imageList.value)..addAll(value.data?.hits ?? []);
         } else if (value is HomeErrorPromptState) {
+          // Shows an error message in case of failure, using the snackbar,
+          // but don't stop the user from seeing the already loaded data.
           showSnackBar(context, value.errorMessage);
         }
       },
+      // Only listen when the state is HomeSuccessState or HomeErrorPromptState.
+      // added this code to avoid unnecessary state listen
       listenWhen: (final state) => state is HomeSuccessState || state is HomeErrorPromptState,
     );
 
@@ -69,16 +86,24 @@ class HomeScreen extends HookWidget {
   }
 }
 
+/// A grid view widget that displays a list of images.
+/// The grid adjusts the number of columns based on the available width.
 class _ImageGrid extends StatelessWidget {
   const _ImageGrid({required this.imageList, required this.scrollController});
 
+  /// The list of images to be displayed.
   final List<Hits> imageList;
+
+  /// The scroll controller for managing the scroll position.
   final ScrollController scrollController;
 
   @override
   Widget build(final BuildContext context) => LayoutBuilder(
         builder: (final context, final constraints) => HookBuilder(
           builder: (final context) {
+            // Dynamically calculates the number of columns based on the available width.
+            // useMemoized is used to avoid unnecessary code execution.
+            // This code will be executed only when the width of screen is changed
             final crossAxisCount = useMemoized(
               () {
                 const itemWidth = 200;
@@ -87,6 +112,7 @@ class _ImageGrid extends StatelessWidget {
               [constraints.maxWidth],
             );
 
+            // Builds a grid view with a fixed number of columns.
             return GridView.builder(
               controller: scrollController,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -110,11 +136,17 @@ class _ImageGrid extends StatelessWidget {
       );
 }
 
+/// A tile widget that displays an individual image along with likes and views count.
 class _ImageTile extends StatelessWidget {
   const _ImageTile({required this.image, required this.likesCount, required this.viewsCount});
 
+  /// The image URL to be displayed.
   final String? image;
+
+  /// The number of likes for the image.
   final int? likesCount;
+
+  /// The number of views for the image.
   final int? viewsCount;
 
   @override
@@ -125,6 +157,7 @@ class _ImageTile extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // Fades in the image with a placeholder if loading.
               FadeInImage(
                 height: 120,
                 fit: BoxFit.fitWidth,
@@ -135,10 +168,12 @@ class _ImageTile extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 5),
+              // Displays the likes count.
               Text(
                 'Likes: ${likesCount ?? 0}',
                 style: TextStyle(fontSize: 12),
               ),
+              // Displays the views count.
               Text(
                 'Views: ${viewsCount ?? 0}',
                 style: TextStyle(fontSize: 12),
