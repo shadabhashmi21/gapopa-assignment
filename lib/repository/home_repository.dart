@@ -23,7 +23,7 @@ class HomeRepository extends BaseRepository {
   }) async {
     try {
       final response = await networkService.get(
-        'api/?key=${app_constants.apiKey}&page=$pageNumber&per_page=$pagePerQuery}',
+        'api/?key=${app_constants.apiKey}&page=$pageNumber&per_page=$pagePerQuery',
       );
 
       // Return the successful response wrapped in a Right.

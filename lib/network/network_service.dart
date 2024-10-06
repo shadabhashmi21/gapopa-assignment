@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:gapopa_assignment/log_helper.dart';
 import 'package:gapopa_assignment/network/network_exception.dart';
+import 'package:gapopa_assignment/resources/app_constants.dart' as app_constants;
 import 'package:gapopa_assignment/resources/app_utils.dart';
 
 /// A service class for handling network requests using the Dio package.
@@ -16,9 +17,9 @@ class NetworkService {
   NetworkService()
       : _dio = Dio(
           BaseOptions(
-            baseUrl: _baseUrl,
-            connectTimeout: _apiTimeout,
-            receiveTimeout: _apiTimeout,
+            baseUrl: app_constants.baseUrl,
+            connectTimeout: app_constants.apiTimeout,
+            receiveTimeout: app_constants.apiTimeout,
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           ),
         ) {
@@ -41,12 +42,6 @@ class NetworkService {
   }
 
   final Dio _dio;
-
-  /// A constant defining the timeout duration for API requests.
-  static const Duration _apiTimeout = Duration(seconds: 30);
-
-  /// A constant defining the base URL for the API.
-  static const String _baseUrl = 'https://pixabay.com/';
 
   /// Sends a GET request to the specified endpoint.
   ///
