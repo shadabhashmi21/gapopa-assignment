@@ -11,6 +11,7 @@ class FullImageScreen extends StatelessWidget {
         appBar: AppBar(),
         body: FadeInImage(
           fit: BoxFit.fitWidth,
+          width: double.infinity,
           placeholder: AssetImage(app_images.placeholder),
           image: NetworkImage(imageLink ?? ''),
           imageErrorBuilder: (final context, final error, final stackTrace) => Flexible(
