@@ -8,6 +8,7 @@ import 'package:gapopa_assignment/resources/app_constants.dart' as app_constants
 import 'package:gapopa_assignment/resources/app_images.dart' as app_images;
 import 'package:gapopa_assignment/resources/app_utils.dart';
 import 'package:gapopa_assignment/resources/app_widgets.dart';
+import 'package:gapopa_assignment/screens/full_image_screen.dart';
 import 'package:hooked_bloc/hooked_bloc.dart';
 
 /// A screen that displays a gallery of images in a grid format.
@@ -128,6 +129,14 @@ class _ImageGrid extends StatelessWidget {
                   image: item.webformatURL,
                   likesCount: item.likes,
                   viewsCount: item.views,
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (final context) => FullImageScreen(
+                        imageLink: item.webformatURL,
+                      ),
+                    ),
+                  ),
                 );
               },
             );
@@ -138,7 +147,7 @@ class _ImageGrid extends StatelessWidget {
 
 /// A tile widget that displays an individual image along with likes and views count.
 class _ImageTile extends StatelessWidget {
-  const _ImageTile({required this.image, required this.likesCount, required this.viewsCount});
+  const _ImageTile({required this.image, required this.likesCount, required this.viewsCount, required this.onTap});
 
   /// The image URL to be displayed.
   final String? image;
@@ -149,44 +158,57 @@ class _ImageTile extends StatelessWidget {
   /// The number of views for the image.
   final int? viewsCount;
 
+  final VoidCallback onTap;
+
   @override
-  Widget build(final BuildContext context) => Card(
-        elevation: 3,
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Fades in the image with a placeholder if loading.
-              FadeInImage(
-                height: 120,
-                fit: BoxFit.fitWidth,
-                placeholder: AssetImage(app_images.placeholder),
-                image: NetworkImage(image ?? ''),
-                imageErrorBuilder: (final context, final error, final stackTrace) => Flexible(
-                  child: Image.asset(app_images.placeholder),
+  Widget build(final BuildContext context) => InkWell(
+        onTap: onTap.call,
+        child: Card(
+          elevation: 3,
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Fades in the image with a placeholder if loading.
+                FadeInImage(
+                  height: 120,
+                  fit: BoxFit.fitWidth,
+                  placeholder: AssetImage(app_images.placeholder),
+                  image: NetworkImage(image ?? ''),
+                  imageErrorBuilder: (final context, final error, final stackTrace) => Flexible(
+                    child: Image.asset(app_images.placeholder),
+                  ),
                 ),
-              ),
-              SizedBox(height: 5),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Displays the likes count.
-                  Icon(Icons.thumb_up, size: 15,),
-                  Text(
-                    '${likesCount ?? 0}',
-                    style: TextStyle(fontSize: 12),
-                  ),
-                  SizedBox(width: 10,),
-                  // Displays the views count.
-                  Icon(Icons.remove_red_eye, size: 15,),
-                  Text(
-                    '${viewsCount ?? 0}',
-                    style: TextStyle(fontSize: 12),
-                  ),
-                ],
-              ),
-            ],
+                SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Displays the likes count.
+                    Icon(
+                      Icons.thumb_up,
+                      size: 15,
+                    ),
+                    Text(
+                      '${likesCount ?? 0}',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    // Displays the views count.
+                    Icon(
+                      Icons.remove_red_eye,
+                      size: 15,
+                    ),
+                    Text(
+                      '${viewsCount ?? 0}',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       );
